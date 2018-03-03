@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[55]:
-
-
 import os
 import gensim
 import numpy as np
@@ -24,19 +18,6 @@ from gensim.models import Word2Vec
 
 import matplotlib.pyplot as plt
 
-
-# In[2]:
-
-
-'''# check if gpu is on (see in console)
-import tensorflow as tf
-sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
-sess'''
-
-
-# In[69]:
-
-
 # GLOBAL PARAMETERS
 NB_CATEGORIES = 52
 EPOCHS = 10
@@ -44,10 +25,7 @@ PADDING = 150
 TRAINABLE = False
 BATCHSIZE = 32
 
-
 # In[65]:
-
-
 class CNN_model():
     def __init__(self, nbCategories=None, verbose=False, trainable = True, medicaments = []):
         self.verbose = verbose
@@ -56,9 +34,9 @@ class CNN_model():
         self.paddingLength = PADDING
         self.maxNumberWords = (1e5)
         self.trainable = trainable
-        
+
         self.tokenizer = text.Tokenizer(num_words=self.maxNumberWords)
-        
+
         self.medicaments = medicaments
 
     def preprocess(self, x):
@@ -68,7 +46,7 @@ class CNN_model():
         sequences = self.tokenizer.texts_to_sequences(x)
         sequences = sequence.pad_sequences(sequences, self.paddingLength)
         return sequences
-    
+
     def spelling_correction(self, x, correct_dict ={}, verbose = False):
         corrected_x = []
         for w in x.split():
@@ -79,7 +57,7 @@ class CNN_model():
                 w = w_corrected
             corrected_x.append(w)
         return ' '.join(corrected_x)
-    
+
     def preprocessLabels(self, labels):
         return to_categorical(labels, num_classes=self.nbCategories)
 
@@ -88,19 +66,19 @@ class CNN_model():
         drop_rate = 0.5
         nb_filters = 32
         filter_size = 3
-        
+
         my_input = keras.Input(shape=(self.paddingLength,), name= 'input')
-        
+
         embedding = (Embedding(input_dim = self.embedding.shape[0], output_dim = self.embedding.shape[1],
             weights = [self.embedding], input_length = self.paddingLength, trainable = self.trainable, name = 'embedding')) (my_input)
-        
+
         embedding_dropped = Dropout(drop_rate, name = 'drop1')(embedding)
         conv = Conv1D(nb_filters, filter_size, activation= 'relu', name = 'conv1')(embedding_dropped)
         pooled_conv = GlobalMaxPooling1D(name = 'pool1')(conv)
         pooled_conv_dropped = Dropout(drop_rate, name = 'drop2')(pooled_conv)
-    
+
         prob = Dense(self.nbCategories, activation= 'softmax', name = 'dense1') (pooled_conv_dropped)
-        
+
         self.model = Model(my_input, prob)
 
         self.model.compile(
@@ -127,8 +105,6 @@ class CNN_model():
 
 
 # In[21]:
-
-
 dataFolder = '../posos-data-challenge/challenge_data'
 medicsPath = os.path.join(dataFolder, 'medicaments_france.xls')
 correctionsPath = os.path.join(dataFolder, 'corrections.csv')
@@ -138,11 +114,10 @@ yPath = os.path.join(dataFolder, 'challenge_output_data_training_file_predict_th
 
 
 # In[22]:
-
-
 # adding the medicament list
 MEDICAMENTS = []
 medic_db = pd.read_excel(medicsPath)
+
 for m in medic_db['Dénomination spécialité']:
     med = []
     for w in m.split():
@@ -153,11 +128,14 @@ for m in medic_db['Dénomination spécialité']:
         med = med.lower()
         if med not in MEDICAMENTS:
             MEDICAMENTS.append(med.lower())
+
 print(len(MEDICAMENTS))
+
 for m in medic_db['Libellé ATC']:
     med = m.split()[0].lower()
     if med not in MEDICAMENTS:
         MEDICAMENTS.append(med)
+
 print('Liste de médicaments regroupant les libéllés ATC et les dénominations de spécialité,  de taille: {}'.format(len(MEDICAMENTS)))
 print('Sample of medicament names: \n', MEDICAMENTS[:10])
 
@@ -264,4 +242,3 @@ plt.show()
 
 
 yTestCategories
-
