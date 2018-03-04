@@ -136,14 +136,12 @@ for m in medic_db['Libellé ATC']:
     if med not in MEDICAMENTS:
         MEDICAMENTS.append(med)
 
-print('Liste de médicaments regroupant les libéllés ATC et les dénominations de spécialité,  de taille: {}'.format(len(MEDICAMENTS)))
+print('Liste de médicaments regroupant les libéllés ATC et les dénominations de spécialité, de taille: {}'.format(len(MEDICAMENTS)))
 print('Sample of medicament names: \n', MEDICAMENTS[:10])
 
 
 # In[66]:
-
-
-model = CNN_model(nbCategories=NB_CATEGORIES, trainable = TRAINABLE, medicaments= MEDICAMENTS)
+model = CNN_model(nbCategories=NB_CATEGORIES, trainable=TRAINABLE, medicaments=MEDICAMENTS)
 # Loading, parsing and spliting training and testing data
 x = pd.read_csv(xPath, delimiter=';', usecols=[1]).values.ravel()
 y = pd.read_csv(yPath, delimiter=';', usecols=[1]).values.ravel()
@@ -157,8 +155,6 @@ for i, s in enumerate(x):
 
 
 # In[50]:
-
-
 # keras tokenizer gives all informations about our vocabulary
 model.preprocess(x)
 x_vocab  = list(model.tokenizer.word_index.keys())
