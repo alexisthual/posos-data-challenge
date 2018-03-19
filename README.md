@@ -9,4 +9,9 @@ Formally, the problem is a text classification problem where texts are a set of 
 
 ### Challenge link: [Ecole Normale Supérieure challenge website](https://challengedata.ens.fr/fr/challenge/33/predisez_la_reponse_attendue.html)
 
+## TODO
 
+* extraction des mots les plus représentatifs d'une catégorie
+* revoir le preprocess (notamment la correction orthographique)
+* rafiner le modèle avec les mots extraits (matrice des cosine puis convolutions)
+* nettoyer le workflow
