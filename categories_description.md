@@ -25,14 +25,14 @@ Short file to dessribe manually what are the topics of each categories
 14:
 15:
 16:
-17:
+17: hey
 18:
 19:
 20:
 21:
 22:
 23:
-24:disponibility medicament, (géographic and temporal)
+24:disponibilité médicament, (géographique et temporelle)
 25:
 26:
 27:
